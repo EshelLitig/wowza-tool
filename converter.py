@@ -1,9 +1,17 @@
 import streamlit as st
+import random
 
 st.set_page_config(page_title="Wowza Interlaced Converter", layout="wide")
 
-# --- SIDEBAR: REPO LINKS ---
+# --- SIDEBAR: IMAGES & LINKS ---
 with st.sidebar:
+    # 🖼️ STATIC IMAGES (Brand Identity)
+    st.image("logo_top.jpg", use_container_width=True)
+    st.image("logo_middle.jpg", use_container_width=True)
+    st.image("logo_bottom.jpg", use_container_width=True)
+    
+    st.divider()
+
     st.header("🔗 Reference Links")
     st.info("Quick access to configuration files & sheets:")
     
@@ -29,7 +37,39 @@ with st.sidebar:
         """
     )
 
-# --- MAIN APP ---
+# --- 🎰 THE LOGO GAME (Main Page Header) ---
+st.markdown("### 🎲 Spin the Logos!")
+
+# 1. Define the "Winning" order
+correct_order = ["logo_top.jpg", "logo_middle.jpg", "logo_bottom.jpg"]
+
+# 2. Initialize the state
+if "current_order" not in st.session_state:
+    st.session_state.current_order = correct_order.copy()
+
+# 3. Game Controls
+col_game_btn, col_game_msg = st.columns([1, 4])
+with col_game_btn:
+    if st.button("🎰 Spin!", help="Shuffle the images!"):
+        random.shuffle(st.session_state.current_order)
+        # Check for win immediately after shuffle
+        if st.session_state.current_order == correct_order:
+            st.balloons()
+            st.toast("🎉 JACKPOT! Perfect Order!", icon="🏆")
+
+# 4. Display Game Images (Small, Side-by-Side)
+g_col1, g_col2, g_col3 = st.columns(3)
+
+with g_col1:
+    st.image(st.session_state.current_order[0], width=150)
+with g_col2:
+    st.image(st.session_state.current_order[1], width=150)
+with g_col3:
+    st.image(st.session_state.current_order[2], width=150)
+
+st.divider()
+
+# --- MAIN APP CONTENT ---
 st.title("🎥 FFmpeg Command Generator")
 st.markdown("Generate your FFmpeg strings quickly without managing spreadsheet rows.")
 
